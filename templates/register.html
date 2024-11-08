@@ -1,44 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
-    <form method="POST" action="{{ url_for('register') }}">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.username.label }} 
-            {{ form.username(size=20) }}
-            {% for error in form.username.errors %}
-                <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.email.label }} 
-            {{ form.email(size=20) }}
-            {% for error in form.email.errors %}
-                <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.password.label }} 
-            {{ form.password(size=20) }}
-            {% for error in form.password.errors %}
-                <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.confirm_password.label }} 
-            {{ form.confirm_password(size=20) }}
-            {% for error in form.confirm_password.errors %}
-                <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-        </div>
-        <div>
-            <button type="submit">Register</button>
-        </div>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4" style="width: 400px;">
+        <h2 class="card-title text-center mb-4">Register</h2>
+        
+        <!-- Flash messages section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Registration form -->
+        <form method="POST" action="{{ url_for('register') }}">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group mb-3">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+            </div>
+
+            <div class="form-group mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
+            </div>
+
+            <div class="form-group mb-3">
+                {{ form.confirm_password.label(class="form-label") }}
+                {{ form.confirm_password(class="form-control") }}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

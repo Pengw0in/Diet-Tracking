@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from forms import RegistrationForm, LoginForm
 from forms import HomeForm
+from flask import flash, redirect, url_for
 
 
 app = Flask(__name__)
@@ -40,11 +41,13 @@ with app.app_context():
 # Routes
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    form = HomeForm()  # Ensure HomeForm is properly imported
+    form = HomeForm()
     if form.validate_on_submit():
-        flash('Form submitted successfully!', 'success')
-        return redirect(url_for('home'))  # Redirect after POST to avoid re-submission
+        # Process the email or save it as necessary
+        flash('Email submitted successfully!', 'success')
+        return redirect(url_for('diet_log'))  # Redirect to the diet log page (or any other page)
     return render_template('home.html', form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,25 +66,31 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user)
-            flash('Login successful!', 'success')
-            return redirect(url_for('home'))
+        if user and user.check_password(form.password.data):
+            flash(f"Welcome, {user.username}!", "success")
+            return redirect(url_for('dashboard'))  # Change 'dashboard' to your actual route name
         else:
-            flash('Login unsuccessful. Please check email and password', 'danger')
+            flash("Invalid username or password. Please try again.", "danger")
     return render_template('login.html', form=form)
 
+from flask_login import login_required
+
 @app.route('/diet-log')
-@login_required
+@login_required  # Ensures the user is logged in
 def diet_log():
     logs = DietLog.query.all()
     return render_template('diet_log.html', logs=logs)
 
 @app.route('/logout')
 def logout():
-    logout_user()  # This will log out the user
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('home'))
+    logout_user()
+    flash('You have been logged out!', 'info')
+    return redirect(url_for('home'))  # Redirect to home after logging out
+
+@app.route('/test')
+def test():
+    return 'Test page works!'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

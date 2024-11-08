@@ -1,31 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-    <h1>Welcome to the Home Page!</h1>
+{% extends "base.html" %}
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to Your Diet Tracking App</h1>
+        <p class="lead">Track your meals, set goals, and stay healthy. Start managing your diet today!</p>
+        <hr class="my-4">
+        <p>Get started with the tools to track your daily meals, log calories, and achieve your health goals.</p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('diet_log') }}" role="button">Start Tracking</a>
+    </div>
 
-    <!-- Form -->
-    <form method="POST" action="/">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.email.label }} {{ form.email() }}
+    <!-- Features Section (Cards) -->
+    <div class="row mt-5">
+        <!-- Card 1: Easy Diet Tracking -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x150" class="card-img-top" alt="Diet Tracking">
+                <div class="card-body">
+                    <h5 class="card-title">Easy Diet Tracking</h5>
+                    <p class="card-text">Log your meals quickly and easily to stay on top of your daily intake.</p>
+                </div>
+            </div>
         </div>
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+
+        <!-- Card 2: Set Goals -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x150" class="card-img-top" alt="Goals">
+                <div class="card-body">
+                    <h5 class="card-title">Set Your Goals</h5>
+                    <p class="card-text">Set personalized nutrition goals to track your progress over time.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Health Insights -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x150" class="card-img-top" alt="Health Insights">
+                <div class="card-body">
+                    <h5 class="card-title">Health Insights</h5>
+                    <p class="card-text">Get valuable insights and suggestions to help you reach your health targets.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="mt-5 text-center">
+        <h2>About Us</h2>
+        <p class="lead">Our goal is to help you stay healthy by tracking your diet and providing helpful tips and insights.</p>
+    </div>
+
+</div>
+{% endblock %}

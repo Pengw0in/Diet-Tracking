@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Diet Log</title>
-</head>
-<body>
-    <h1>Your Diet Log</h1>
-    <ul>
-        {% for log in logs %}
-            <li>{{ log.meal }} - {{ log.calories }} calories</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mt-5">
+    <h2>Diet Log</h2>
+    <p>Track your daily meals here.</p>
+    <form method="POST" action="{{ url_for('add_diet_log') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.meal_type.label }} 
+            {{ form.meal_type(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label }}
+            {{ form.description(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-success">Add Meal</button>
+    </form>
+</div>
+{% endblock %}
