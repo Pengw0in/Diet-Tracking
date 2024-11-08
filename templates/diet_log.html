@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diet Log</title>
+</head>
+<body>
+    <h1>Your Diet Log</h1>
+    <ul>
+        {% for log in logs %}
+            <li>{{ log.meal }} - {{ log.calories }} calories</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
