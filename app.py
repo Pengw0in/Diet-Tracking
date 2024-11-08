@@ -2,14 +2,23 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from forms import RegistrationForm, LoginForm
+from forms import HomeForm
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Use a strong, random key in production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite for development
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # Redirect users to login page if not logged in
+
+# Define user_loader
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # User model
 class User(UserMixin, db.Model):
@@ -29,9 +38,13 @@ with app.app_context():
     db.create_all()
 
 # Routes
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    form = HomeForm()  # Ensure HomeForm is properly imported
+    if form.validate_on_submit():
+        flash('Form submitted successfully!', 'success')
+        return redirect(url_for('home'))  # Redirect after POST to avoid re-submission
+    return render_template('home.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -55,7 +68,7 @@ def login():
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Login failed. Check your email and password.', 'danger')
+            flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', form=form)
 
 @app.route('/diet-log')
@@ -63,6 +76,12 @@ def login():
 def diet_log():
     logs = DietLog.query.all()
     return render_template('diet_log.html', logs=logs)
+
+@app.route('/logout')
+def logout():
+    logout_user()  # This will log out the user
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

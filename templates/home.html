@@ -2,12 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Diet Tracker - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
 </head>
 <body>
-    <h1>Welcome to the Diet Tracker!</h1>
-    <a href="{{ url_for('register') }}">Register</a> | 
-    <a href="{{ url_for('login') }}">Login</a> | 
-    <a href="{{ url_for('diet_log') }}">View Diet Log</a>
+    <h1>Welcome to the Home Page!</h1>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Form -->
+    <form method="POST" action="/">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }} {{ form.email() }}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
