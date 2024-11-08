@@ -1,0 +1,19 @@
+diet tracking programme
+
+food pref(lunch , break , dinner), weight and height, bmi
+information about food(carbs, prots, vits etc)
+store user information and login page?
+workout thingy
+{external info about workout}
+WATERRRRR is imp or the duck gonna eat you
+calorie tracking
+interactive web design maybe = minimalism!
+
+
+***Resources***
+FIREBASE
+python/flask
+some external info about food
+
+
+
